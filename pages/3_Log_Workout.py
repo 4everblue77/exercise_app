@@ -17,7 +17,7 @@ with st.form("log_form"):
 
     if submitted:
         response = insert_log(user_id, date.today().isoformat(), exercise, weight, sets, reps, time, rpe)
-        if response.error is None:
+        if responseand response.data:
             st.success("Workout logged to Supabase!")
         else:
             st.error(f"Failed to log workout: {response.error}")
