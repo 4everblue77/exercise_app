@@ -11,9 +11,9 @@ with st.form("preferences_form"):
     equipment = st.multiselect("Available Equipment", ["Barbell", "Dumbbells", "Kettlebells", "Pull-up Bar", "Ropes"])
     submitted = st.form_submit_button("Save Preferences")
 
-    if submitted:
-        response = insert_user(name, goal, days, ",".join(equipment))
-        if response.error is None:
-            st.success("Preferences saved to Supabase!")
-        else:
-            st.error(f"Failed to save preferences: {response.error}")
+if submitted:
+    response = insert_user(name, goal, days, ",".join(equipment))
+    if response and response.data:
+        st.success("Preferences saved to Supabase!")
+    else:
+        st.error("Failed to save preferences.")
