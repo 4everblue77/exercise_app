@@ -6,7 +6,7 @@ from datetime import date
 st.title("Today's Workout")
 
 response = get_programs_by_date(date.today().isoformat())
-if response.error is None and response.data:
+if response and response.data:
     for row in response.data:
         st.write(f"**{row['exercise']}** – {row['sets']} sets × {row['reps']} reps (Rest: {row['rest']}s)")
 else:
