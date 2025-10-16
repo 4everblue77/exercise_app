@@ -15,9 +15,9 @@ with st.form("log_form"):
     rpe = st.slider("RPE", 1, 10)
     submitted = st.form_submit_button("Log Workout")
 
-if submitted:
-    response = insert_log(user_id, date.today().isoformat(), exercise, weight, sets, reps, time, rpe)
-    if response.status_code == 201:
-        st.success("Workout logged to Supabase!")
-    else:
-        st.error("Failed to log workout.")
+    if submitted:
+        response = insert_log(user_id, date.today().isoformat(), exercise, weight, sets, reps, time, rpe)
+        if response.error is None:
+            st.success("Workout logged to Supabase!")
+        else:
+            st.error(f"Failed to log workout: {response.error}")
