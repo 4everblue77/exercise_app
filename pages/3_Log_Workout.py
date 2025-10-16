@@ -1,11 +1,12 @@
 
 import streamlit as st
-from db import get_connection
+from db import insert_log
 from datetime import date
 
 st.title("Log Workout")
 
 with st.form("log_form"):
+    user_id = st.number_input("User ID", min_value=1)
     exercise = st.text_input("Exercise")
     weight = st.number_input("Weight (kg)", min_value=0.0)
     sets = st.number_input("Sets", min_value=1)
@@ -15,9 +16,8 @@ with st.form("log_form"):
     submitted = st.form_submit_button("Log Workout")
 
 if submitted:
-    conn = get_connection()
-    cursor = conn.cursor()
-    cursor.execute("INSERT INTO logs (user_id, date, exercise, weight, sets, reps, time, rpe) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", (1, date.today().isoformat(), exercise, weight, sets, reps, time, rpe))
-    conn.commit()
-    conn.close()
-    st.success("Workout logged!")
+    response = insert_log(user_id, date.today().isoformat(), exercise, weight, sets, reps, time, rpe)
+    if response.status_code == 201:
+        st.success("Workout logged to Supabase!")
+    else:
+        st.error("Failed to log workout.")

@@ -1,18 +1,13 @@
 
 import streamlit as st
-from db import get_connection
+from db import get_programs_by_date
 from datetime import date
 
 st.title("Today's Workout")
 
-conn = get_connection()
-cursor = conn.cursor()
-cursor.execute("SELECT * FROM programs WHERE date = ?", (date.today().isoformat(),))
-workout = cursor.fetchall()
-conn.close()
-
-if workout:
-    for row in workout:
-        st.write(f"**{row[4]}** – {row[5]} sets × {row[6]} reps (Rest: {row[7]}s)")
+response = get_programs_by_date(date.today().isoformat())
+if response.data:
+    for row in response.data:
+        st.write(f"**{row['exercise']}** – {row['sets']} sets × {row['reps']} reps (Rest: {row['rest']}s)")
 else:
     st.info("No workout scheduled for today.")

@@ -1,6 +1,6 @@
 
 import streamlit as st
-from db import get_connection
+from db import insert_user
 
 st.title("Program Builder")
 
@@ -12,9 +12,8 @@ with st.form("preferences_form"):
     submitted = st.form_submit_button("Save Preferences")
 
 if submitted:
-    conn = get_connection()
-    cursor = conn.cursor()
-    cursor.execute("INSERT INTO users (name, goal, days_per_week, equipment) VALUES (?, ?, ?, ?)", (name, goal, days, ",".join(equipment)))
-    conn.commit()
-    conn.close()
-    st.success("Preferences saved!")
+    response = insert_user(name, goal, days, ",".join(equipment))
+    if response.status_code == 201:
+        st.success("Preferences saved to Supabase!")
+    else:
+        st.error("Failed to save preferences.")

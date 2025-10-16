@@ -1,5 +1,13 @@
 
 import streamlit as st
+from db import get_logs_by_user
 
 st.title("Progress Tracker")
-st.info("Graphs and analytics will be added in Phase 2.")
+
+user_id = st.number_input("Enter User ID", min_value=1)
+response = get_logs_by_user(user_id)
+
+if response.data:
+    st.dataframe(response.data)
+else:
+    st.info("No logs found for this user.")
