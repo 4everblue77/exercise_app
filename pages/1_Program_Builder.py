@@ -13,7 +13,7 @@ with st.form("preferences_form"):
 
 if submitted:
     response = insert_user(name, goal, days, ",".join(equipment))
-    if response.status_code == 201:
-        st.success("Preferences saved to Supabase!")
-    else:
-        st.error("Failed to save preferences.")
+if response.error is None:
+    st.success("Preferences saved to Supabase!")
+else:
+    st.error(f"Failed to save preferences: {response.error}")
